@@ -7,6 +7,9 @@ const {
     filePathData
 } = require('./config/index.js')
 const minimist = require('minimist')
+const {
+    logStyles
+} = require('./style/logStyle')
 const argv = minimist(process.argv.slice(2))
 
 let params = {
@@ -51,23 +54,23 @@ const createCommandToPush = (remote = 'origin', branch = '') => {
 }
 
 // git命令
-const createCommandToFetch = () =>{
+const createCommandToFetch = () => {
     return `git fetch`
 }
 
 // 执行命令
-const execCmd = async (command, path,type) => {
-    console.log(`path = ${path} start ${type}`);
+const execCmd = async (command, path, type) => {
+    console.log(logStyles.cyan[0],`path = ${path} start ${type}`);
     exec(command, {
         cwd: path
     }, (error, stdout, stderr) => {
         if (error) {
-            console.error(`执行的错误: ${error}`);
+            console.error(logStyles.red[0],`执行的错误: ${error}`);
             return;
         }
         stdout && console.log(`stdout: ${stdout}`);
-        stderr && console.error(`stderr: ${stderr}`);
-        console.log(`path = ${path} end ${type}`);
+        stderr && console.error(logStyles.red[0],`stderr: ${stderr}`);
+        console.log(logStyles.cyan[0],`path = ${path} end ${type}`);
     })
 }
 
@@ -99,7 +102,7 @@ const pull = async (remote = 'origin', branch = '') => {
     for (const path of passPathArr) {
         // comm = `${createCommandToFolder(path)} && ${createCommandToPull()}`
         comm = createCommandToPull(remote, branch)
-        await execCmd(comm, path)
+        await execCmd(comm, path, 'pull')
     }
 }
 
@@ -110,7 +113,7 @@ const push = async (remote = 'origin', branch = '') => {
     for (const path of passPathArr) {
         // comm = `${createCommandToFolder(path)} && ${createCommandToPush()}`
         comm = createCommandToPush(remote, branch)
-        await execCmd(comm, path)
+        await execCmd(comm, path, 'push')
     }
 }
 
@@ -120,7 +123,7 @@ const fetch = async () => {
     let comm = ''
     for (const path of passPathArr) {
         comm = createCommandToFetch()
-        await execCmd(comm, path)
+        await execCmd(comm, path, 'fetch')
     }
 }
 
