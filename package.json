@@ -1,0 +1,17 @@
+{
+  "name": "git-pull-push",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "pull": "node index --type pull",
+    "push": "node index --type push",
+    "fetch": "node index --type fetch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "minimist": "^1.2.5"
+  }
+}
