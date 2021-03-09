@@ -56,7 +56,8 @@ const createCommandToFetch = () =>{
 }
 
 // 执行命令
-const execCmd = async (command, path) => {
+const execCmd = async (command, path,type) => {
+    console.log(`path = ${path} start ${type}`);
     exec(command, {
         cwd: path
     }, (error, stdout, stderr) => {
@@ -66,6 +67,7 @@ const execCmd = async (command, path) => {
         }
         stdout && console.log(`stdout: ${stdout}`);
         stderr && console.error(`stderr: ${stderr}`);
+        console.log(`path = ${path} end ${type}`);
     })
 }
 
@@ -96,10 +98,8 @@ const pull = async (remote = 'origin', branch = '') => {
     let comm = ''
     for (const path of passPathArr) {
         // comm = `${createCommandToFolder(path)} && ${createCommandToPull()}`
-        console.log(`path = ${path} start pull`);
         comm = createCommandToPull(remote, branch)
         await execCmd(comm, path)
-        console.log(`path = ${path} end pull`);
     }
 }
 
@@ -109,10 +109,8 @@ const push = async (remote = 'origin', branch = '') => {
     let comm = ''
     for (const path of passPathArr) {
         // comm = `${createCommandToFolder(path)} && ${createCommandToPush()}`
-        console.log(`path = ${path} start push`);
         comm = createCommandToPush(remote, branch)
         await execCmd(comm, path)
-        console.log(`path = ${path} end push`);
     }
 }
 
@@ -121,10 +119,8 @@ const fetch = async () => {
     let passPathArr = await passCheckPath()
     let comm = ''
     for (const path of passPathArr) {
-        console.log(`path = ${path} start fetch`);
         comm = createCommandToFetch()
         await execCmd(comm, path)
-        console.log(`path = ${path} end fetch`);
     }
 }
 
