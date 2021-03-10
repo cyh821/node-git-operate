@@ -67,10 +67,12 @@ const execCmd = async (command, path, type) => {
             console.error(logStyles.red[0],`执行的错误: ${error}`);
             return;
         }
-        console.log(logStyles.cyan[0],`path = ${path} start ${type}`);
+        console.log(logStyles.white[0],'---------------------------------------------------------');
+        console.log(logStyles.yellow[0],`path = ${path} start ${type}`);
         stdout && console.log(logStyles.cyan[0],`stdout: ${stdout}`);
         stderr && console.error(logStyles.red[0],`stderr: ${stderr}`);
-        console.log(logStyles.cyan[0],`path = ${path} end ${type}`);
+        console.log(logStyles.yellow[0],`path = ${path} end ${type}`);
+        console.log(logStyles.white[0],'---------------------------------------------------------');
     })
 }
 
