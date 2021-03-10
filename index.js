@@ -60,7 +60,6 @@ const createCommandToFetch = () => {
 
 // 执行命令
 const execCmd = async (command, path, type) => {
-    console.log(logStyles.cyan[0],`path = ${path} start ${type}`);
     exec(command, {
         cwd: path
     }, (error, stdout, stderr) => {
@@ -68,7 +67,8 @@ const execCmd = async (command, path, type) => {
             console.error(logStyles.red[0],`执行的错误: ${error}`);
             return;
         }
-        stdout && console.log(`stdout: ${stdout}`);
+        console.log(logStyles.cyan[0],`path = ${path} start ${type}`);
+        stdout && console.log(logStyles.cyan[0],`stdout: ${stdout}`);
         stderr && console.error(logStyles.red[0],`stderr: ${stderr}`);
         console.log(logStyles.cyan[0],`path = ${path} end ${type}`);
     })
