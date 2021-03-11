@@ -131,7 +131,7 @@ const fetch = async () => {
 
 // 根据命令行传过来的参数判断执行方法
 const processArgvType = () => {
-    params.remote = argv.remote || 'origin'
+    params.remote = argv.remote || ''
     params.branch = argv.branch || ''
     switch (argv.type) {
         case 'pull':

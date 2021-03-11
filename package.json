@@ -6,7 +6,10 @@
   "scripts": {
     "pull": "node index --type pull",
     "push": "node index --type push",
-    "fetch": "node index --type fetch"
+    "fetch": "node index --type fetch",
+    "pull-origin": "node index --type pull --remote origin",
+    "push-origin": "node index --type push --remote origin",
+    "fetch-origin": "node index --type fetch --remote origin"
   },
   "keywords": [],
   "author": "",
