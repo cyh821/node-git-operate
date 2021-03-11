@@ -58,22 +58,30 @@ const createCommandToFetch = () => {
     return `git fetch`
 }
 
+
+
 // 执行命令
-const execCmd = async (command, path, type) => {
-    exec(command, {
-        cwd: path
-    }, (error, stdout, stderr) => {
-        if (error) {
-            console.error(logStyles.red[0],`执行的错误: ${error}`);
-            return;
-        }
-        console.log(logStyles.white[0],'---------------------------------------------------------');
-        console.log(logStyles.yellow[0],`path = ${path} start ${type}`);
-        stdout && console.log(logStyles.cyan[0],`stdout: ${stdout}`);
-        stderr && console.error(logStyles.red[0],`stderr: ${stderr}`);
-        console.log(logStyles.yellow[0],`path = ${path} end ${type}`);
-        console.log(logStyles.white[0],'---------------------------------------------------------');
+const execCmd = (command, path, type) => {
+    return new Promise((resolve,reject)=>{
+        exec(command, {
+            cwd: path
+        }, (error, stdout, stderr) => {
+            if (error) {
+                console.error(logStyles.red[0],`执行的错误: ${error}`);
+                reject()
+                return;
+            }
+            console.log(logStyles.white[0],`-----------------------${type}----------------------------------`);
+            console.log(logStyles.yellow[0],`path = ${path} start ${type}`);
+            console.log(logStyles.blue[0],`command : ${command}`);
+            stdout && console.log(logStyles.cyan[0],`${type} stdout : ${stdout}`);
+            stderr && console.error(logStyles.red[0],`${type} stderr : ${stderr}`);
+            console.log(logStyles.yellow[0],`path = ${path} end ${type}`);
+            console.log(logStyles.white[0],`-----------------------${type}----------------------------------`);
+            resolve(stdout)
+        })
     })
+    
 }
 
 // 过滤不是文件夹的路径
@@ -97,12 +105,19 @@ const passCheckPath = async () => {
     return passPathArr
 }
 
+const getGitCurrentBranch = async (path) => {
+    const currentBranchCommand = 'git symbolic-ref --short -q HEAD'
+    let branch = await execCmd(currentBranchCommand,path,'get brand')
+    return branch
+}
+
 // 执行pull
 const pull = async (remote = 'origin', branch = '') => {
     let passPathArr = await passCheckPath()
     let comm = ''
     for (const path of passPathArr) {
         // comm = `${createCommandToFolder(path)} && ${createCommandToPull()}`
+        branch = await getGitCurrentBranch(path)
         comm = createCommandToPull(remote, branch)
         await execCmd(comm, path, 'pull')
     }
@@ -114,6 +129,7 @@ const push = async (remote = 'origin', branch = '') => {
     let comm = ''
     for (const path of passPathArr) {
         // comm = `${createCommandToFolder(path)} && ${createCommandToPush()}`
+        branch = await getGitCurrentBranch(path)
         comm = createCommandToPush(remote, branch)
         await execCmd(comm, path, 'push')
     }
@@ -130,8 +146,8 @@ const fetch = async () => {
 }
 
 // 根据命令行传过来的参数判断执行方法
-const processArgvType = () => {
-    params.remote = argv.remote || ''
+const processArgvType = async () => {
+    params.remote = argv.remote || 'origin'
     params.branch = argv.branch || ''
     switch (argv.type) {
         case 'pull':
