@@ -71,13 +71,14 @@ const execCmd = (command, path, type) => {
                 reject()
                 return;
             }
-            console.log(logStyles.white[0],`-----------------------${type}----------------------------------`);
+            let projectName = path.slice(path.lastIndexOf('/')+1) 
+            console.log(logStyles.white[0],`-----------------------project ${projectName} ${type}----------------------------------`);
             console.log(logStyles.yellow[0],`path = ${path} start ${type}`);
             console.log(logStyles.blue[0],`command : ${command}`);
             stdout && console.log(logStyles.cyan[0],`${type} stdout : ${stdout}`);
             stderr && console.error(logStyles.red[0],`${type} stderr : ${stderr}`);
             console.log(logStyles.yellow[0],`path = ${path} end ${type}`);
-            console.log(logStyles.white[0],`-----------------------${type}----------------------------------`);
+            console.log(logStyles.white[0],`-----------------------project ${projectName} ${type}----------------------------------`);
             resolve(stdout)
         })
     })
